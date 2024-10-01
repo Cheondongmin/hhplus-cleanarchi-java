@@ -1,26 +1,29 @@
 package com.hhplus_cleanarchi_java.application.lecture;
 
 import com.hhplus_cleanarchi_java.domain.lecture.LectureInfo;
+import com.hhplus_cleanarchi_java.domain.lecture.entity.Lecture;
 import com.hhplus_cleanarchi_java.domain.lecture.entity.LectureRegistration;
+import com.hhplus_cleanarchi_java.domain.lecture.entity.LectureSchedule;
 import com.hhplus_cleanarchi_java.domain.lecture.repository.LectureRegistrationRepository;
 import com.hhplus_cleanarchi_java.domain.lecture.repository.LectureRepository;
+import com.hhplus_cleanarchi_java.domain.lecture.repository.LectureScheduleRepository;
 import com.hhplus_cleanarchi_java.domain.lecture.service.LectureRegistrations;
-import com.hhplus_cleanarchi_java.interfaces.dto.res.LectureApplyRes;
-import com.hhplus_cleanarchi_java.interfaces.dto.res.LectureInfoApplicationRes;
-import com.hhplus_cleanarchi_java.interfaces.dto.res.LectureRegisterResultRes;
-import org.springframework.transaction.annotation.Transactional;
+import com.hhplus_cleanarchi_java.interfaces.dto.res.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class LectureService {
     private final LectureRepository lectureRepository;
+    private final LectureScheduleRepository lectureScheduleRepository;
     private final LectureRegistrationRepository lectureRegistrationRepository;
     private final LectureRegistrations lectureRegistrations; // 특강 신청 비즈니스 로직 관리 클래스
 
@@ -48,9 +51,25 @@ public class LectureService {
         return new LectureRegisterResultRes(!lectureRegistrationList.isEmpty());
     }
 
+    @Transactional
+    public LectureAddRes insertLecture(String lectureName) {
+        Lecture lecture = new Lecture(lectureName);
+        lectureRepository.save(lecture);
+        return new LectureAddRes(lecture.getId(), lecture.getName());
+    }
+
+    @Transactional
+    public LectureScheduleAddRes insertLectureSchedule(Long lectureId, int limitedCount, LocalDateTime startDateTime, LocalDateTime endDateTime) {
+        Lecture lecture = lectureRepository.findById(lectureId);
+        LectureSchedule lectureSchedule = new LectureSchedule(lecture.getId(),limitedCount,startDateTime,endDateTime);
+        lectureScheduleRepository.save(lectureSchedule);
+        return new LectureScheduleAddRes(lectureSchedule.getId(), lectureSchedule.getStartDateTime().toString(), lectureSchedule.getEndDateTime().toString());
+    }
+
     @Transactional(readOnly = true)
     public List<LectureInfoApplicationRes> findLectures() {
         List<LectureInfo> lectureInfos = lectureRepository.findAllLectureInfo();
         return LectureInfoApplicationRes.from(lectureInfos);
     }
+
 }

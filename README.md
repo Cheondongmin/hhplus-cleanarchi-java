@@ -6,8 +6,24 @@
     - [X] 동일한 신청자는 한 번의 수강 신청만 성공할 수 있다.
     - [X] 선착순 30명안에 신청하지 못한 신청자는 요청에 실패한다.
 
-**[ ERD ]**
 
+- [X] GET `/lectures/application/{userId}` : 특강 신청 완료 여부 조회 API
+  - [X] 특강 신청에 성공한 사용자는 성공, 등록자 명단에 없는 사용자는 실패를 반환한다.
+
+
+- [X] POST `/lectures/add` : 특강 등록 API
+  - [X] 특강을 등록 할 수 있다.
+
+
+- [X] POST `/lectures/schedule/add` : 특강 스케쥴 등록 API
+  - [X] 특강 스케쥴을 등록할 수 있다.
+
+
+- [X] GET `/lectures` : 특강 스케쥴 조회 API
+  - [X] 현재 등록된 특강 스케쥴을 조회할 수 있다.
+
+
+**[ ERD ]**
 ```mermaid
 erDiagram
     LECTURE {
