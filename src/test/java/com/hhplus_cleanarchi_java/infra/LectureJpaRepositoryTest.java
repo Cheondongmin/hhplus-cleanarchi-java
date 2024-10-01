@@ -1,7 +1,7 @@
 package com.hhplus_cleanarchi_java.infra;
 
 import com.hhplus_cleanarchi_java.IntegrationTest;
-import com.hhplus_cleanarchi_java.domain.lecture.LectureInfo;
+import com.hhplus_cleanarchi_java.domain.lecture.dto.LectureInfo;
 import com.hhplus_cleanarchi_java.domain.lecture.entity.Lecture;
 import com.hhplus_cleanarchi_java.domain.lecture.repository.LectureRepository;
 import com.hhplus_cleanarchi_java.domain.lecture.repository.LectureScheduleRepository;

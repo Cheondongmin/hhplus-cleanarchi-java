@@ -8,7 +8,6 @@ import java.time.LocalDateTime;
 public record LectureScheduleAddReq(
         @NotNull
         Long lectureId,
-        int limitedCount,
         @NotNull
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss") // "yyyy-MM-dd HH:mm:ss" 형식
         LocalDateTime startDateTime,

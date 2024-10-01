@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface LectureRegistrationJpaRepository extends JpaRepository<LectureRegistration, Long> {
     List<LectureRegistration> findByLectureScheduleIdAndUserId(Long lectureScheduleId, Long userId);
+
+    List<LectureRegistration> findByUserId(Long userId);
 }

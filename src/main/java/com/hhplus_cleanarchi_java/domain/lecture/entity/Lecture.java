@@ -22,6 +22,9 @@ public class Lecture {
     @Column(name = "name", nullable = false)
     private String name;
 
+    @Column(name = "teacher", nullable = false)
+    private String teacher;
+
     @Column(name = "insert_dt", nullable = false, updatable = false)
     private LocalDateTime insertDt;
 
@@ -32,8 +35,9 @@ public class Lecture {
     @Column(name = "is_delete", nullable = false)
     private IsDelete isDelete;
 
-    public Lecture(String name) {
+    public Lecture(String name, String teacher) {
         this.name = name;
+        this.teacher = teacher;
         this.insertDt = LocalDateTime.now();
         this.updateDt = LocalDateTime.now();
         this.isDelete = IsDelete.N;

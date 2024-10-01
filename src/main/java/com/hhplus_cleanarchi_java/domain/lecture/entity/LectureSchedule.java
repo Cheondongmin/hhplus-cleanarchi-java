@@ -48,9 +48,9 @@ public class LectureSchedule {
     @Version
     private Long version;  // 낙관적 락을 위한 버전 필드
 
-    public LectureSchedule(Long lectureId, int limitedCount, LocalDateTime startDateTime, LocalDateTime endDateTime) {
+    public LectureSchedule(Long lectureId, LocalDateTime startDateTime, LocalDateTime endDateTime) {
         this.lectureId = lectureId;
-        this.limitedCount = limitedCount;
+        this.limitedCount = 30;
         this.registeredCount = 0;
         this.startDateTime = startDateTime;
         this.endDateTime = endDateTime;

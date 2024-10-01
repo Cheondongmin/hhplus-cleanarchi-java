@@ -23,6 +23,11 @@ public class LectureRegistrationRepositoryImpl implements LectureRegistrationRep
     }
 
     @Override
+    public List<LectureRegistration> findByUserId(Long userId) {
+        return lectureRegistrationJpaRepository.findByUserId(userId);
+    }
+
+    @Override
     public long count() {
         return lectureRegistrationJpaRepository.count();
     }

@@ -4,6 +4,8 @@ import jakarta.validation.constraints.NotNull;
 
 public record LectureAddReq(
         @NotNull
-        String lectureName
+        String lectureName,
+        @NotNull
+        String teacherName
 ) {
 }

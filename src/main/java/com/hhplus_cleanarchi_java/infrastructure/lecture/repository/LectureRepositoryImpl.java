@@ -1,14 +1,13 @@
 package com.hhplus_cleanarchi_java.infrastructure.lecture.repository;
 
+import com.hhplus_cleanarchi_java.domain.lecture.dto.LectureInfo;
 import com.hhplus_cleanarchi_java.domain.lecture.entity.Lecture;
-import com.hhplus_cleanarchi_java.domain.lecture.LectureInfo;
 import com.hhplus_cleanarchi_java.domain.lecture.repository.LectureRepository;
 import com.hhplus_cleanarchi_java.infrastructure.lecture.persistence.LectureJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor

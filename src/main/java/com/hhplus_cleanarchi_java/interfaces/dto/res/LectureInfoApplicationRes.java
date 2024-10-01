@@ -1,6 +1,6 @@
 package com.hhplus_cleanarchi_java.interfaces.dto.res;
 
-import com.hhplus_cleanarchi_java.domain.lecture.LectureInfo;
+import com.hhplus_cleanarchi_java.domain.lecture.dto.LectureInfo;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -9,6 +9,7 @@ import java.util.List;
 public record LectureInfoApplicationRes(
         Long lectureId,
         String lectureName,
+        String teacherName,
         Long lectureScheduleId,
         int limitedCount,
         int registeredCount,
@@ -27,6 +28,7 @@ public record LectureInfoApplicationRes(
         return new LectureInfoApplicationRes(
                 lectureInfo.getLectureId(),
                 lectureInfo.getName(),
+                lectureInfo.getTeacher(),
                 lectureInfo.getLectureScheduleId(),
                 lectureInfo.getLimitedCount(),
                 lectureInfo.getRegisteredCount(),
