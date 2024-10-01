@@ -1,6 +1,7 @@
 package com.hhplus_cleanarchi_java.application.lecture;
 
 import com.hhplus_cleanarchi_java.domain.lecture.LectureInfo;
+import com.hhplus_cleanarchi_java.domain.lecture.dto.LectureRegisterInfo;
 import com.hhplus_cleanarchi_java.domain.lecture.entity.Lecture;
 import com.hhplus_cleanarchi_java.domain.lecture.entity.LectureRegistration;
 import com.hhplus_cleanarchi_java.domain.lecture.entity.LectureSchedule;
@@ -8,7 +9,7 @@ import com.hhplus_cleanarchi_java.domain.lecture.repository.LectureRegistrationR
 import com.hhplus_cleanarchi_java.domain.lecture.repository.LectureRepository;
 import com.hhplus_cleanarchi_java.domain.lecture.repository.LectureScheduleRepository;
 import com.hhplus_cleanarchi_java.domain.lecture.service.LectureRegistrations;
-import com.hhplus_cleanarchi_java.interfaces.dto.res.*;
+import com.hhplus_cleanarchi_java.domain.lecture.service.LectureSelection;
 import lombok.RequiredArgsConstructor;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.retry.annotation.Backoff;
@@ -25,51 +26,48 @@ public class LectureService {
     private final LectureRepository lectureRepository;
     private final LectureScheduleRepository lectureScheduleRepository;
     private final LectureRegistrationRepository lectureRegistrationRepository;
-    private final LectureRegistrations lectureRegistrations; // 특강 신청 비즈니스 로직 관리 클래스
+    private final LectureRegistrations lectureRegistrations;
+    private final LectureSelection lectureSelection;
 
-    /* @Retryable:
-        Spring의 spring-retry 라이브러리에서 제공하는 어노테이션입니다.
-        특정 예외가 발생할 경우, 지정된 횟수만큼 재시도를 하도록 설정할 수 있습니다.
-        여기서 retryFor는 재시도할 예외를 지정하며, maxAttempts는 최대 재시도 횟수를, backoff는 재시도 사이의 딜레이를 설정합니다.
-        이 경우, ObjectOptimisticLockingFailureException 예외가 발생하면 최대 10번까지 20ms의 딜레이로 재시도하게 됩니다.
-    */
     @Retryable(
             retryFor = {ObjectOptimisticLockingFailureException.class},
             maxAttempts = 10,
             backoff = @Backoff(delay = 200)
     )
     @Transactional
-    public LectureApplyRes apply(long lectureScheduleId, long userId) {
+    public LectureRegistration apply(long lectureScheduleId, long userId) {
+        // 특강 신청 로직
         LectureRegistration lectureRegistration = lectureRegistrations.register(lectureScheduleId, userId);
         lectureRegistrationRepository.save(lectureRegistration);
-        return new LectureApplyRes(lectureRegistration.getUserId(), lectureRegistration.getLectureScheduleId());
+        return lectureRegistration;
     }
 
     @Transactional(readOnly = true)
-    public LectureRegisterResultRes hasUserAppliedForLecture(long lectureScheduleId, long userId) {
-        List<LectureRegistration> lectureRegistrationList = lectureRegistrationRepository.findBy(lectureScheduleId, userId);
-        return new LectureRegisterResultRes(!lectureRegistrationList.isEmpty());
+    public List<LectureInfo> findLectures() {
+        // 특강 정보를 조회
+        return lectureRepository.findAllLectureInfo();
+    }
+
+    @Transactional(readOnly = true)
+    public List<LectureRegisterInfo> selectUserRegistrationList(Long userId) {
+        // 유저의 등록된 특강 리스트를 반환
+        return lectureSelection.selectRegisterInfoByUserId(userId);
     }
 
     @Transactional
-    public LectureAddRes insertLecture(String lectureName) {
-        Lecture lecture = new Lecture(lectureName);
+    public Lecture insertLecture(String lectureName, String teacherName) {
+        // 새로운 특강을 추가
+        Lecture lecture = new Lecture(lectureName, teacherName);
         lectureRepository.save(lecture);
-        return new LectureAddRes(lecture.getId(), lecture.getName());
+        return lecture;
     }
 
     @Transactional
-    public LectureScheduleAddRes insertLectureSchedule(Long lectureId, int limitedCount, LocalDateTime startDateTime, LocalDateTime endDateTime) {
+    public LectureSchedule insertLectureSchedule(Long lectureId, LocalDateTime startDateTime, LocalDateTime endDateTime) {
+        // 새로운 특강 스케줄을 추가
         Lecture lecture = lectureRepository.findById(lectureId);
-        LectureSchedule lectureSchedule = new LectureSchedule(lecture.getId(), limitedCount, startDateTime, endDateTime);
+        LectureSchedule lectureSchedule = new LectureSchedule(lecture.getId(), startDateTime, endDateTime);
         lectureScheduleRepository.save(lectureSchedule);
-        return new LectureScheduleAddRes(lectureSchedule.getId(), lectureSchedule.getStartDateTime().toString(), lectureSchedule.getEndDateTime().toString());
+        return lectureSchedule;
     }
-
-    @Transactional(readOnly = true)
-    public List<LectureInfoApplicationRes> findLectures() {
-        List<LectureInfo> lectureInfos = lectureRepository.findAllLectureInfo();
-        return LectureInfoApplicationRes.from(lectureInfos);
-    }
-
 }
