@@ -80,4 +80,46 @@ public class OptimisticLectureServiceTest extends IntegrationTest {
         long registeredCount = lectureRegistrationRepository.count(); // 등록된 신청 인원 수 확인
         assertThat(registeredCount).isEqualTo(lectureLimitCount); // 등록된 인원이 30명인지 확인
     }
+
+    @Test
+    void 동일_유저가_같은_특강을_5번_신청했을_때_1번만_성공하는지_검증() throws Exception {
+        // given
+        Lecture lecture = lectureRepository.save(자바_특강());
+        LocalDateTime startDateTime = LocalDateTime.now().plusSeconds(5L);
+        LocalDateTime endDateTime = LocalDateTime.now().plusMinutes(1L);
+        LectureSchedule lectureSchedule = lectureScheduleRepository.save(특강_스케줄(lecture.getId(), 0, startDateTime, endDateTime));
+
+        long userId = 1L;
+        int requestCount = 5; // 동일한 유저가 5번 신청
+
+        ExecutorService executorService = Executors.newFixedThreadPool(requestCount);
+        CountDownLatch latch = new CountDownLatch(requestCount);
+
+        AtomicInteger successCount = new AtomicInteger();
+        AtomicInteger failCount = new AtomicInteger();
+
+        // when
+        for (int i = 0; i < requestCount; i++) {
+            executorService.execute(() -> {
+                try {
+                    lectureService.apply(lectureSchedule.getId(), userId);
+                    successCount.incrementAndGet(); // 성공 시 카운트 증가
+                } catch (Exception e) {
+                    failCount.incrementAndGet(); // 실패 시 카운트 증가
+                } finally {
+                    latch.countDown();
+                }
+            });
+        }
+
+        latch.await(); // 모든 스레드가 끝날 때까지 대기
+
+        // then
+        long registeredCount = lectureRegistrationRepository.count();
+
+        // 성공 횟수는 1번, 실패 횟수는 4번이어야 한다
+        assertThat(successCount.get()).isEqualTo(1);
+        assertThat(failCount.get()).isEqualTo(4);
+        assertThat(registeredCount).isEqualTo(1); // 실제로 등록된 신청 수는 1개여야 함
+    }
 }
