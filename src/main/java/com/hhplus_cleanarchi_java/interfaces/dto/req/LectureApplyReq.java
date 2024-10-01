@@ -1,8 +1,8 @@
-package com.hhplus_cleanarchi_java.interfaces.dto.res;
+package com.hhplus_cleanarchi_java.interfaces.dto.req;
 
 import jakarta.validation.constraints.NotNull;
 
-public record LectureApplyResponse(
+public record LectureApplyReq(
         @NotNull
         Long userId,
         @NotNull
