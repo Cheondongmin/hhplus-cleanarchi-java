@@ -1,19 +1,26 @@
 package com.hhplus_cleanarchi_java.application.lecture;
 
+import com.hhplus_cleanarchi_java.domain.lecture.LectureInfo;
 import com.hhplus_cleanarchi_java.domain.lecture.entity.LectureRegistration;
 import com.hhplus_cleanarchi_java.domain.lecture.repository.LectureRegistrationRepository;
+import com.hhplus_cleanarchi_java.domain.lecture.repository.LectureRepository;
 import com.hhplus_cleanarchi_java.domain.lecture.service.LectureRegistrations;
 import com.hhplus_cleanarchi_java.interfaces.dto.res.LectureApplyRes;
-import jakarta.transaction.Transactional;
+import com.hhplus_cleanarchi_java.interfaces.dto.res.LectureInfoApplicationRes;
+import com.hhplus_cleanarchi_java.interfaces.dto.res.LectureRegisterResultRes;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class LectureService {
+    private final LectureRepository lectureRepository;
     private final LectureRegistrationRepository lectureRegistrationRepository;
     private final LectureRegistrations lectureRegistrations; // 특강 신청 비즈니스 로직 관리 클래스
 
@@ -33,5 +40,17 @@ public class LectureService {
         LectureRegistration lectureRegistration = lectureRegistrations.register(lectureScheduleId, userId);
         lectureRegistrationRepository.save(lectureRegistration);
         return new LectureApplyRes(lectureRegistration.getUserId(), lectureRegistration.getLectureScheduleId());
+    }
+
+    @Transactional(readOnly = true)
+    public LectureRegisterResultRes hasUserAppliedForLecture(long lectureScheduleId, long userId) {
+        List<LectureRegistration> lectureRegistrationList = lectureRegistrationRepository.findBy(lectureScheduleId, userId);
+        return new LectureRegisterResultRes(!lectureRegistrationList.isEmpty());
+    }
+
+    @Transactional(readOnly = true)
+    public List<LectureInfoApplicationRes> findLectures() {
+        List<LectureInfo> lectureInfos = lectureRepository.findAllLectureInfo();
+        return LectureInfoApplicationRes.from(lectureInfos);
     }
 }
