@@ -5,6 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface LectureRegistrationJpaRepository extends JpaRepository<LectureRegistration, Long>{
+public interface LectureRegistrationJpaRepository extends JpaRepository<LectureRegistration, Long> {
     List<LectureRegistration> findByLectureScheduleIdAndUserId(Long lectureScheduleId, Long userId);
 }

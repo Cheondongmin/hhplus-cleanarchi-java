@@ -1,4 +1,5 @@
 package com.hhplus_cleanarchi_java.infrastructure.lecture.repository;
+
 import com.hhplus_cleanarchi_java.domain.lecture.entity.Lecture;
 import com.hhplus_cleanarchi_java.domain.lecture.LectureInfo;
 import com.hhplus_cleanarchi_java.domain.lecture.repository.LectureRepository;
@@ -14,7 +15,7 @@ import java.util.Optional;
 public class LectureRepositoryImpl implements LectureRepository {
     private final LectureJpaRepository lectureJpaRepository;
 
-    public Lecture save(Lecture lecture){
+    public Lecture save(Lecture lecture) {
         return lectureJpaRepository.save(lecture);
     }
 

@@ -49,8 +49,8 @@ public class LectureRegistrations {
 
         // 조회된 등록 내역 중 동일한 스케줄에 이미 신청한 기록이 있는지 확인
         boolean isDuplicate = false;
-        for(LectureRegistration lectureRegistration : lectureRegistrationList) {
-            if(lectureRegistration.getUserId() == userId && lectureRegistration.getLectureScheduleId() == lectureScheduleId) {
+        for (LectureRegistration lectureRegistration : lectureRegistrationList) {
+            if (lectureRegistration.getUserId() == userId && lectureRegistration.getLectureScheduleId() == lectureScheduleId) {
                 isDuplicate = true;
                 break;
             }

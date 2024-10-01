@@ -75,7 +75,7 @@ public class LectureSchedule {
     }
 
     public void increaseRegisterCount() {
-        if(this.limitedCount <= this.registeredCount){
+        if (this.limitedCount <= this.registeredCount) {
             throw new IllegalArgumentException("신청 가능한 인원을 초과하였습니다.");
         }
         this.registeredCount++;

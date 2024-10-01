@@ -19,16 +19,16 @@ public class LectureController {
     private final LectureService lectureService;
 
     /*
-    * 특강 신청 API
-    */
+     * 특강 신청 API
+     */
     @PostMapping("/apply")
     public LectureApplyRes apply(@RequestBody @Valid LectureApplyReq req) {
         return lectureService.apply(req.lectureScheduleId(), req.userId());
     }
 
     /*
-    * 특강 신청 완료 여부 조회 API
-    */
+     * 특강 신청 완료 여부 조회 API
+     */
     @GetMapping("/application/{lectureScheduleId}/{userId}")
     public LectureRegisterResultRes hasUserAppliedForLecture(@PathVariable Long lectureScheduleId, @PathVariable Long userId) {
         return lectureService.hasUserAppliedForLecture(lectureScheduleId, userId);
@@ -47,7 +47,7 @@ public class LectureController {
      */
     @PostMapping("/schedule/add")
     public LectureScheduleAddRes insertLectureSchedule(@RequestBody @Valid LectureScheduleAddReq req) {
-        return lectureService.insertLectureSchedule(req.lectureId(), req.limitedCount(),  req.startDateTime(), req.endDateTime());
+        return lectureService.insertLectureSchedule(req.lectureId(), req.limitedCount(), req.startDateTime(), req.endDateTime());
     }
 
     /**

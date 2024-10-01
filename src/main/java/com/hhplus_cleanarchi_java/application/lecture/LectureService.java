@@ -61,7 +61,7 @@ public class LectureService {
     @Transactional
     public LectureScheduleAddRes insertLectureSchedule(Long lectureId, int limitedCount, LocalDateTime startDateTime, LocalDateTime endDateTime) {
         Lecture lecture = lectureRepository.findById(lectureId);
-        LectureSchedule lectureSchedule = new LectureSchedule(lecture.getId(),limitedCount,startDateTime,endDateTime);
+        LectureSchedule lectureSchedule = new LectureSchedule(lecture.getId(), limitedCount, startDateTime, endDateTime);
         lectureScheduleRepository.save(lectureSchedule);
         return new LectureScheduleAddRes(lectureSchedule.getId(), lectureSchedule.getStartDateTime().toString(), lectureSchedule.getEndDateTime().toString());
     }
