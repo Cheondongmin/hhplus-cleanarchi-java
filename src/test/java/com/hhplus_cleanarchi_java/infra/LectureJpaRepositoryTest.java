@@ -32,7 +32,7 @@ class LectureJpaRepositoryTest extends IntegrationTest {
         // given
         Lecture javaLecture = lectureRepository.save(자바_특강());
         Lecture springLecture = lectureRepository.save(스프링_특강());
-        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime now = LocalDateTime.now().withNano(0);
         LocalDateTime firstStartTime = now.plusHours(1L);
         LocalDateTime firstEndTime = now.plusHours(2L);
         LocalDateTime secondStartTime = now.plusHours(3L);
@@ -42,7 +42,6 @@ class LectureJpaRepositoryTest extends IntegrationTest {
         특강_스케줄_등록(javaLecture, secondStartTime, secondEndTime);
         특강_스케줄_등록(springLecture, firstStartTime, firstEndTime);
         특강_스케줄_등록(springLecture, secondStartTime, secondEndTime);
-
 
         // when
         List<LectureInfo> lectureInfos = lectureRepository.findAllLectureInfo();
@@ -54,8 +53,7 @@ class LectureJpaRepositoryTest extends IntegrationTest {
                         tuple("자바 특강", firstStartTime, firstEndTime),
                         tuple("자바 특강", secondStartTime, secondEndTime),
                         tuple("스프링 특강", firstStartTime, firstEndTime),
-                        tuple("스프링 특강", secondStartTime, secondEndTime
-                        )
+                        tuple("스프링 특강", secondStartTime, secondEndTime)
                 );
     }
 
@@ -63,8 +61,8 @@ class LectureJpaRepositoryTest extends IntegrationTest {
         lectureScheduleRepository.save(특강_스케줄(
                 lecture.getId(),
                 0,
-                startTime,
-                endTime
+                startTime.withNano(0),
+                endTime.withNano(0)
         ));
     }
 

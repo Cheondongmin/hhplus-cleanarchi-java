@@ -2,7 +2,8 @@ package com.hhplus_cleanarchi_java.domain;
 
 import com.hhplus_cleanarchi_java.domain.lecture.entity.LectureRegistration;
 import org.junit.jupiter.api.Test;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class LectureRegistrationTest {
 
@@ -13,7 +14,8 @@ public class LectureRegistrationTest {
         long lectureId = 1L;
 
         LectureRegistration lectureRegistration = new LectureRegistration(lectureId, userId);
-        assertThat(lectureRegistration.isSameBy(lectureId, userId)).isTrue();
+        assertEquals(lectureRegistration.getLectureScheduleId(), lectureId);
+        assertEquals(lectureRegistration.getUserId(), userId);
     }
 
 }

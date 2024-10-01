@@ -45,11 +45,16 @@ public class LectureRegistrations {
     // 중복 등록 검증 메서드: 사용자가 이미 해당 강의 스케줄에 등록되었는지 확인
     private void checkDuplicateRegistration(long userId, long lectureScheduleId) {
         // 사용자 ID와 강의 스케줄 ID로 기존의 등록 내역을 조회
-        List<LectureRegistration> lectureRegistrations = lectureRegistrationRepository.findBy(lectureScheduleId, userId);
+        List<LectureRegistration> lectureRegistrationList = lectureRegistrationRepository.findBy(lectureScheduleId, userId);
 
         // 조회된 등록 내역 중 동일한 스케줄에 이미 신청한 기록이 있는지 확인
-        boolean isDuplicate = lectureRegistrations.stream()
-                .anyMatch(registration -> registration.isSameBy(userId, lectureScheduleId));
+        boolean isDuplicate = false;
+        for(LectureRegistration lectureRegistration : lectureRegistrationList) {
+            if(lectureRegistration.getUserId() == userId && lectureRegistration.getLectureScheduleId() == lectureScheduleId) {
+                isDuplicate = true;
+                break;
+            }
+        }
 
         // 만약 중복 신청이 확인되면 예외 발생
         if (isDuplicate) {

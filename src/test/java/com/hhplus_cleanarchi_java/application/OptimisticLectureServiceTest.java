@@ -59,11 +59,12 @@ public class OptimisticLectureServiceTest extends IntegrationTest {
         AtomicInteger successCount = new AtomicInteger(); // 성공적으로 신청한 사용자 수를 추적
         AtomicInteger failCount = new AtomicInteger(); // 실패한 사용자 수를 추적
 
-        // when: 100명의 사용자가 동시에 특강 신청을 시도
+        // when: 40명의 사용자가 동시에 특강 신청을 시도
         for (int i = 1; i <= userCount; i++) {
+            final long userId = i; // 사용자 ID를 루프 인덱스 i로 설정하여 각 사용자가 고유한 ID를 가짐
             executorService.execute(() -> { // 각 사용자에 대해 스레드 실행
                 try {
-                    lectureService.apply(lecture.getId(), userCount); // 특강 신청 시도
+                    lectureService.apply(lecture.getId(), userId); // 고유한 userId로 특강 신청 시도
                     successCount.incrementAndGet(); // 성공 시 성공 카운트 증가
                 } catch (Exception e) {
                     System.out.println(e.getMessage()); // 에러 메시지 출력

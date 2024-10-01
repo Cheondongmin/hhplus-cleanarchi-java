@@ -42,8 +42,4 @@ public class LectureRegistration {
         this.updateDt = LocalDateTime.now();
         this.isDelete = IsDelete.N;
     }
-
-    public boolean isSameBy(long lectureScheduleId, long userId) {
-        return this.lectureScheduleId == lectureScheduleId && this.userId == userId;
-    }
 }

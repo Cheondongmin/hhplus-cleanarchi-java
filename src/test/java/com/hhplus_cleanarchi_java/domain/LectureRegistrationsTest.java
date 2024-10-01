@@ -9,7 +9,6 @@ import com.hhplus_cleanarchi_java.domain.lecture.repository.LectureRepository;
 import com.hhplus_cleanarchi_java.domain.lecture.repository.LectureScheduleRepository;
 import com.hhplus_cleanarchi_java.domain.lecture.service.LectureRegistrations;
 import com.hhplus_cleanarchi_java.fixture.LectureRegistrationFixture;
-import org.assertj.core.api.AssertionsForClassTypes;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,6 +18,7 @@ import java.time.LocalDateTime;
 import static com.hhplus_cleanarchi_java.fixture.LectureFixture.자바_특강;
 import static com.hhplus_cleanarchi_java.fixture.LectureScheduleFixture.특강_스케줄;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 class LectureRegistrationsTest extends IntegrationTest {
@@ -48,7 +48,8 @@ class LectureRegistrationsTest extends IntegrationTest {
         LectureRegistration lectureRegistration = lectureRegistrations.register(lectureSchedule.getId(), userId);
 
         // then
-        AssertionsForClassTypes.assertThat(lectureRegistration.isSameBy(lectureSchedule.getId(), userId)).isTrue();
+        assertEquals(lectureRegistration.getLectureScheduleId(), lectureSchedule.getId());
+        assertEquals(lectureRegistration.getUserId(), userId);
     }
 
     @Test
