@@ -8,8 +8,8 @@ import com.hhplus_cleanarchi_java.domain.lecture.entity.LectureSchedule;
 import com.hhplus_cleanarchi_java.domain.lecture.repository.LectureRegistrationRepository;
 import com.hhplus_cleanarchi_java.domain.lecture.repository.LectureRepository;
 import com.hhplus_cleanarchi_java.domain.lecture.repository.LectureScheduleRepository;
-import com.hhplus_cleanarchi_java.domain.lecture.service.LectureRegistrations;
-import com.hhplus_cleanarchi_java.domain.lecture.service.LectureSelection;
+import com.hhplus_cleanarchi_java.domain.lecture.service.LectureRegistrationService;
+import com.hhplus_cleanarchi_java.domain.lecture.service.LectureSelectService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.retry.annotation.Backoff;
@@ -22,12 +22,12 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class LectureService {
+public class LectureFacade {
     private final LectureRepository lectureRepository;
     private final LectureScheduleRepository lectureScheduleRepository;
     private final LectureRegistrationRepository lectureRegistrationRepository;
-    private final LectureRegistrations lectureRegistrations;
-    private final LectureSelection lectureSelection;
+    private final LectureRegistrationService lectureRegistrationService;
+    private final LectureSelectService lectureSelectService;
 
     @Retryable(
             retryFor = {ObjectOptimisticLockingFailureException.class},
@@ -37,7 +37,7 @@ public class LectureService {
     @Transactional
     public LectureRegistration apply(long lectureScheduleId, long userId) {
         // 특강 신청 로직
-        LectureRegistration lectureRegistration = lectureRegistrations.register(lectureScheduleId, userId);
+        LectureRegistration lectureRegistration = lectureRegistrationService.register(lectureScheduleId, userId);
         lectureRegistrationRepository.save(lectureRegistration);
         return lectureRegistration;
     }
@@ -51,7 +51,7 @@ public class LectureService {
     @Transactional(readOnly = true)
     public List<LectureRegisterInfo> selectUserRegistrationList(Long userId) {
         // 유저의 등록된 특강 리스트를 반환
-        return lectureSelection.selectRegisterInfoByUserId(userId);
+        return lectureSelectService.selectRegisterInfoByUserId(userId);
     }
 
     @Transactional

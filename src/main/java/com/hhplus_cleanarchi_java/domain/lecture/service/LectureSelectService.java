@@ -15,7 +15,7 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-public class LectureSelection {
+public class LectureSelectService {
     // 특강 조회와 관련된 중요한 비즈니스 규칙을 한 곳에서 관리하는 도메인 서비스 클래스
     private final LectureRegistrationRepository lectureRegistrationRepository;
     private final LectureScheduleRepository lectureScheduleRepository;

@@ -1,7 +1,7 @@
 package com.hhplus_cleanarchi_java.application;
 
 import com.hhplus_cleanarchi_java.IntegrationTest;
-import com.hhplus_cleanarchi_java.application.lecture.LectureService;
+import com.hhplus_cleanarchi_java.application.lecture.LectureFacade;
 import com.hhplus_cleanarchi_java.domain.lecture.entity.Lecture;
 import com.hhplus_cleanarchi_java.domain.lecture.entity.LectureRegistration;
 import com.hhplus_cleanarchi_java.domain.lecture.entity.LectureSchedule;
@@ -21,10 +21,10 @@ import static org.assertj.core.api.AssertionsForClassTypes.tuple;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 @SpringBootTest
-class LectureServiceTest extends IntegrationTest {
+class LectureFacadeTest extends IntegrationTest {
 
     @Autowired
-    private LectureService lectureService;
+    private LectureFacade lectureFacade;
 
     @Autowired
     private LectureRepository lectureRepository;
@@ -47,7 +47,7 @@ class LectureServiceTest extends IntegrationTest {
         long userId = 1L; // 사용자 ID
 
         // when: 해당 스케줄에 사용자가 특강 신청을 진행
-        lectureService.apply(lectureScheduleId, userId);
+        lectureFacade.apply(lectureScheduleId, userId);
 
         // then 특강 신청이 잘 저장되었는지 검증 (특강 신청이 1건 생성되었는지 확인)
         List<LectureRegistration> lectureRegistrations = lectureRegistrationRepository.findBy(lectureScheduleId, userId);

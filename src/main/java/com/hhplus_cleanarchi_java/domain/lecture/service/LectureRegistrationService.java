@@ -11,7 +11,7 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-public class LectureRegistrations {
+public class LectureRegistrationService {
     // 특강 신청과 관련된 중요한 비즈니스 규칙을 한 곳에서 관리하는 도메인 서비스 클래스
     // 여러 도메인 엔티티 간의 상호작용을 관리하고, 중복 신청 방지, 특강 시작 시간 확인 등의 검증을 처리함
     private final LectureRegistrationRepository lectureRegistrationRepository; // 특강 신청 정보를 관리하는 레포지토리

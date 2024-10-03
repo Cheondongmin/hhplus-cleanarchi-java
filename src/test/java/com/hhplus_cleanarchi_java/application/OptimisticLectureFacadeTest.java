@@ -1,7 +1,7 @@
 package com.hhplus_cleanarchi_java.application;
 
 import com.hhplus_cleanarchi_java.IntegrationTest;
-import com.hhplus_cleanarchi_java.application.lecture.LectureService;
+import com.hhplus_cleanarchi_java.application.lecture.LectureFacade;
 import com.hhplus_cleanarchi_java.domain.lecture.entity.Lecture;
 import com.hhplus_cleanarchi_java.domain.lecture.entity.LectureSchedule;
 import com.hhplus_cleanarchi_java.domain.lecture.repository.LectureRegistrationRepository;
@@ -22,10 +22,10 @@ import static com.hhplus_cleanarchi_java.fixture.LectureScheduleFixture.특강_�
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @SpringBootTest
-public class OptimisticLectureServiceTest extends IntegrationTest {
+public class OptimisticLectureFacadeTest extends IntegrationTest {
 
     @Autowired
-    private LectureService lectureService;
+    private LectureFacade lectureFacade;
 
     @Autowired
     private LectureRepository lectureRepository;
@@ -64,7 +64,7 @@ public class OptimisticLectureServiceTest extends IntegrationTest {
             final long userId = i; // 사용자 ID를 루프 인덱스 i로 설정하여 각 사용자가 고유한 ID를 가짐
             executorService.execute(() -> { // 각 사용자에 대해 스레드 실행
                 try {
-                    lectureService.apply(lecture.getId(), userId); // 고유한 userId로 특강 신청 시도
+                    lectureFacade.apply(lecture.getId(), userId); // 고유한 userId로 특강 신청 시도
                     successCount.incrementAndGet(); // 성공 시 성공 카운트 증가
                 } catch (Exception e) {
                     System.out.println(e.getMessage()); // 에러 메시지 출력
@@ -103,7 +103,7 @@ public class OptimisticLectureServiceTest extends IntegrationTest {
         for (int i = 0; i < requestCount; i++) {
             executorService.execute(() -> {
                 try {
-                    lectureService.apply(lectureSchedule.getId(), userId);
+                    lectureFacade.apply(lectureSchedule.getId(), userId);
                     successCount.incrementAndGet(); // 성공 시 카운트 증가
                 } catch (Exception e) {
                     failCount.incrementAndGet(); // 실패 시 카운트 증가
