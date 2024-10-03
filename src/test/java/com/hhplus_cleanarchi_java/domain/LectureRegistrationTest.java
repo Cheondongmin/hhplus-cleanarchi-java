@@ -1,6 +1,6 @@
 package com.hhplus_cleanarchi_java.domain;
 
-import com.hhplus_cleanarchi_java.domain.lecture.entity.LectureRegistration;
+import com.hhplus_cleanarchi_java.app.domain.lecture.entity.LectureRegistration;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

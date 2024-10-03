@@ -1,9 +1,10 @@
 package com.hhplus_cleanarchi_java.domain;
 
-import com.hhplus_cleanarchi_java.domain.lecture.entity.LectureSchedule;
+import com.hhplus_cleanarchi_java.app.domain.lecture.entity.LectureSchedule;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
+
 import static com.hhplus_cleanarchi_java.fixture.LectureScheduleFixture.특강_스케줄;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;

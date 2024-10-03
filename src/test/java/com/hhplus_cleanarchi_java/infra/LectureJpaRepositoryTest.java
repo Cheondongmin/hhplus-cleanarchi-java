@@ -1,10 +1,10 @@
 package com.hhplus_cleanarchi_java.infra;
 
 import com.hhplus_cleanarchi_java.IntegrationTest;
-import com.hhplus_cleanarchi_java.domain.lecture.dto.LectureInfo;
-import com.hhplus_cleanarchi_java.domain.lecture.entity.Lecture;
-import com.hhplus_cleanarchi_java.domain.lecture.repository.LectureRepository;
-import com.hhplus_cleanarchi_java.domain.lecture.repository.LectureScheduleRepository;
+import com.hhplus_cleanarchi_java.app.domain.lecture.dto.LectureInfo;
+import com.hhplus_cleanarchi_java.app.domain.lecture.entity.Lecture;
+import com.hhplus_cleanarchi_java.app.domain.lecture.repository.LectureRepository;
+import com.hhplus_cleanarchi_java.app.domain.lecture.repository.LectureScheduleRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

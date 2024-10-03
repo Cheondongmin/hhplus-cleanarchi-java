@@ -1,13 +1,13 @@
 package com.hhplus_cleanarchi_java.domain;
 
 import com.hhplus_cleanarchi_java.IntegrationTest;
-import com.hhplus_cleanarchi_java.domain.lecture.entity.Lecture;
-import com.hhplus_cleanarchi_java.domain.lecture.entity.LectureRegistration;
-import com.hhplus_cleanarchi_java.domain.lecture.entity.LectureSchedule;
-import com.hhplus_cleanarchi_java.domain.lecture.repository.LectureRegistrationRepository;
-import com.hhplus_cleanarchi_java.domain.lecture.repository.LectureRepository;
-import com.hhplus_cleanarchi_java.domain.lecture.repository.LectureScheduleRepository;
-import com.hhplus_cleanarchi_java.domain.lecture.service.LectureRegistrationService;
+import com.hhplus_cleanarchi_java.app.domain.lecture.entity.Lecture;
+import com.hhplus_cleanarchi_java.app.domain.lecture.entity.LectureRegistration;
+import com.hhplus_cleanarchi_java.app.domain.lecture.entity.LectureSchedule;
+import com.hhplus_cleanarchi_java.app.domain.lecture.repository.LectureRegistrationRepository;
+import com.hhplus_cleanarchi_java.app.domain.lecture.repository.LectureRepository;
+import com.hhplus_cleanarchi_java.app.domain.lecture.repository.LectureScheduleRepository;
+import com.hhplus_cleanarchi_java.app.domain.lecture.service.LectureRegistrationService;
 import com.hhplus_cleanarchi_java.fixture.LectureRegistrationFixture;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +41,7 @@ class LectureRegistrationServiceTest extends IntegrationTest {
         LectureSchedule lectureSchedule = 자바_특강_등록(0, startDateTime, endDateTime);
 
         // when
-        LectureRegistration lectureRegistration = lectureRegistrationService.register(lectureSchedule.getId(), userId);
+        LectureRegistration lectureRegistration = lectureRegistrationService.apply(lectureSchedule.getId(), userId);
 
         // then
         assertEquals(lectureRegistration.getLectureScheduleId(), lectureSchedule.getId());
@@ -61,7 +61,7 @@ class LectureRegistrationServiceTest extends IntegrationTest {
         // 사용자는 해당 특강에 이미 신청한 상태입니다.
 
         // when & then: 다시 같은 특강을 신청하려고 하면 예외가 발생해야 합니다.
-        assertThatThrownBy(() -> lectureRegistrationService.register(lectureSchedule.getId(), userId)) // 같은 특강 신청 시도
+        assertThatThrownBy(() -> lectureRegistrationService.apply(lectureSchedule.getId(), userId)) // 같은 특강 신청 시도
                 .isInstanceOf(RuntimeException.class)
                 .hasMessage("이미 신청한 특강입니다.");
     }
@@ -74,7 +74,7 @@ class LectureRegistrationServiceTest extends IntegrationTest {
         LectureSchedule lectureSchedule = 자바_특강_등록(0, startDateTime, endDateTime); // 자바 특강 스케줄 등록 (등록 인원 0명)
 
         // when & then 특강이 이미 시작된 상태에서 신청을 시도하면 예외가 발생해야 합니다.
-        assertThatThrownBy(() -> lectureRegistrationService.register(lectureSchedule.getId(), userId)) // 특강 신청 시도
+        assertThatThrownBy(() -> lectureRegistrationService.apply(lectureSchedule.getId(), userId)) // 특강 신청 시도
                 .isInstanceOf(RuntimeException.class)
                 .hasMessage("특강 시작일자가 이미 지났습니다.");
     }
@@ -87,7 +87,7 @@ class LectureRegistrationServiceTest extends IntegrationTest {
         LectureSchedule lectureSchedule = 자바_특강_등록(30, startDateTime, endDateTime); // 등록 된 인원이 30명인 자바 특강 스케줄 등록 (제한 인원은 30명으로 고정)
 
         // when & then 제한 인원이 모두 찬 상태에서 신청을 시도하면 예외가 발생해야 합니다.
-        assertThatThrownBy(() -> lectureRegistrationService.register(lectureSchedule.getId(), userId))
+        assertThatThrownBy(() -> lectureRegistrationService.apply(lectureSchedule.getId(), userId))
                 .isInstanceOf(RuntimeException.class)
                 .hasMessage("신청 가능한 인원을 초과하였습니다.");
     }
