@@ -230,7 +230,6 @@ gradle-app.setting
 /gradlew
 /gradlew.bat
 /gradle/
-/src/test/
 /src/main/resources/application-local.yml
 /data/
 /.settings/org.eclipse.buildship.core.prefs
